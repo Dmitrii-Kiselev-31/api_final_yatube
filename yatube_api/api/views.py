@@ -10,7 +10,8 @@ from .serializers import (
     GroupSerializer, PostSerializer, CommentSerializer, FollowSerializer
 )
 
-API_403 = PermissionDenied('Изменение чужого контента запрещено!') 
+API_403 = PermissionDenied('Изменение чужого контента запрещено!')
+
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Group.objects.all()
@@ -48,7 +49,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         post = get_object_or_404(Post, pk=self.kwargs['post_id'])
         return post.comments.select_related('author')
- 
+
     def perform_create(self, serializer):
         post = get_object_or_404(Post, pk=self.kwargs.get('post_id'))
         serializer.save(author=self.request.user, post=post)
