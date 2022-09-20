@@ -34,6 +34,60 @@ python manage.py runserver
 * GET /api/v1/posts/{post_id}/comments/ - Получение всех комментариев к публикации. 
 * GET /api/v1/posts/{post_id}/comments/{id}/ - Получение комментария к публикации по id. 
 
+### Примеры выполнения запросов:
+#### Получаем JWT-токена 
+>```api/v1/jwt/create/```
+>```json
+>{
+>"username": "username",
+>"password": "change"
+>}
+>```
+#### Ответ
+>```json
+>{
+>"refresh": "eyJ0eXAi...haf5nwr2ZU2I",
+>"access": "eyJ0eXAiO...EhAzVlTrskfg"
+>}
+>```
+
+#### Опубликовать новый пост. 
+>```api/v1/posts/```
+
+>```json
+>{
+>"text": "hello",
+>"image": "picture",
+>"group": 0
+>}
+>```
+#### Ответ
+>```json
+>{
+>"id": 0,
+>"author": "username",
+>"text": "hello",
+>"pub_date": "2022-09-24T21:33:02Z",
+>"image": "picture",
+>"group": 0
+>}
+>```
+>
+#### Подписаться на автора.
+>```api/v1/posts/follow/```
+>```json
+>{
+>"following": "sign"
+>}
+>```
+#### Ответ
+>```json
+>{
+>"user": "username",
+>"following": "sign"
+>}
+>```
+
 ## ***Примеры работы с API для авторизованных пользователей***
 * POST /api/v1/posts/ - Добавление новой публикации в коллекцию публикаций. Анонимные запросы запрещены.
 * PUT /api/v1/posts/{id}/ - Обновление публикации по id. Обновить публикацию может только автор публикации. Анонимные запросы запрещены.
