@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, permissions, viewsets, mixins
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .permissions import IsAuthorOrReadOnly
@@ -9,8 +8,6 @@ from posts.models import Group, Post, User, Comment
 from .serializers import (
     GroupSerializer, PostSerializer, CommentSerializer, FollowSerializer
 )
-
-API_403 = PermissionDenied('Изменение чужого контента запрещено!')
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
@@ -43,16 +40,6 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         post = get_object_or_404(Post, pk=self.kwargs.get('post_id'))
         serializer.save(author=self.request.user, post=post)
-
-    def perform_update(self, serializer):
-        if serializer.instance.author != self.request.user:
-            raise API_403
-        super().perform_update(serializer)
-
-    def perform_destroy(self, instance):
-        if instance.author != self.request.user:
-            raise API_403
-        instance.delete()
 
 
 class FollowViewSet(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
